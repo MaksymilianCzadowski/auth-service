@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Authentication Microservice API
   version: 1.0.0
-  description: API documentation for the Authentication Microservice with Google OAuth2.0
+  description: API documentation for the Authentication Microservice with Google OAuth2.0 and OpenID Connect
 
 servers:
   - url: http://localhost:3000
@@ -39,6 +39,8 @@ components:
           type: string
         googleId:
           type: string
+        openIdSub:
+          type: string
     
     AuthResponse:
       type: object
@@ -63,6 +65,36 @@ paths:
     get:
       summary: Google OAuth2.0 Callback
       description: Handles the response from Google OAuth2.0
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/openid:
+    get:
+      summary: Initiate OpenID Connect Authentication
+      description: Redirects to OpenID Connect provider login page
+      tags:
+        - Authentication
+      responses:
+        '302':
+          description: Redirect to OpenID Connect login
+
+  /auth/openid/callback:
+    get:
+      summary: OpenID Connect Callback
+      description: Handles the response from OpenID Connect provider
       tags:
         - Authentication
       responses:

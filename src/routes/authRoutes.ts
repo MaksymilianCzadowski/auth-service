@@ -4,6 +4,7 @@ import { AuthController } from '../controllers/authController';
 
 const router = Router();
 
+// Routes Google OAuth2.0
 router.get(
   '/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -15,6 +16,19 @@ router.get(
   AuthController.googleCallback
 );
 
+// Routes OpenID Connect
+router.get(
+  '/openid',
+  passport.authenticate('openid')
+);
+
+router.get(
+  '/openid/callback',
+  passport.authenticate('openid', { session: false }),
+  AuthController.openidCallback
+);
+
+// Routes communes
 router.get('/verify', AuthController.verifyToken);
 router.post('/logout', AuthController.logout);
 

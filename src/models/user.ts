@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IUser extends Document {
   email: string;
   googleId?: string;
+  openIdSub?: string;
   firstName?: string;
   lastName?: string;
   picture?: string;
@@ -24,6 +25,11 @@ const userSchema = new Schema<IUser>(
       sparse: true,
       unique: true,
     },
+    openIdSub: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
     firstName: String,
     lastName: String,
     picture: String,
@@ -36,5 +42,6 @@ const userSchema = new Schema<IUser>(
 // Index pour optimiser les recherches
 userSchema.index({ email: 1 });
 userSchema.index({ googleId: 1 });
+userSchema.index({ openIdSub: 1 });
 
 export const User = mongoose.model<IUser>('User', userSchema);

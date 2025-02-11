@@ -14,4 +14,12 @@ export const config = {
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3001',
     cookieSecret: process.env.COOKIE_SECRET || 'cookie-secret',
     cookieMaxAge: parseInt(process.env.COOKIE_MAX_AGE || '86400000'), // 24h
+    // OpenID Connect Configuration
+    openid: {
+        issuer: process.env.OPENID_ISSUER || 'http://localhost:8080/realms/master',
+        clientID: process.env.OPENID_CLIENT_ID,
+        clientSecret: process.env.OPENID_CLIENT_SECRET,
+        callbackURL: process.env.OPENID_CALLBACK_URL || 'http://localhost:3000/auth/openid/callback',
+        scope: ['openid', 'profile', 'email']
+    }
 };
