@@ -10,7 +10,7 @@ export const config = {
     jwtExpiresIn: process.env.JWT_EXPIRES_IN || '1d',
     googleClientId: process.env.GOOGLE_CLIENT_ID,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/auth/google/callback',
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3001',
     cookieSecret: process.env.COOKIE_SECRET || 'cookie-secret',
     cookieMaxAge: parseInt(process.env.COOKIE_MAX_AGE || '86400000'), // 24h
