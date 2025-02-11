@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  title: Authentication Microservice API
+  version: 1.0.0
+  description: API documentation for the Authentication Microservice with Google OAuth2.0
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: integer
+    
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        picture:
+          type: string
+        googleId:
+          type: string
+    
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+
+paths:
+  /auth/google:
+    get:
+      summary: Initiate Google OAuth2.0 Authentication
+      description: Redirects to Google login page
+      tags:
+        - Authentication
+      responses:
+        '302':
+          description: Redirect to Google login
+  
+  /auth/google/callback:
+    get:
+      summary: Google OAuth2.0 Callback
+      description: Handles the response from Google OAuth2.0
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /auth/verify:
+    get:
+      summary: Verify JWT Token
+      description: Verifies the validity of a JWT token
+      tags:
+        - Authentication
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Token is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+        '401':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 
