@@ -14,6 +14,7 @@ export const config = {
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3001',
     cookieSecret: process.env.COOKIE_SECRET || 'cookie-secret',
     cookieMaxAge: parseInt(process.env.COOKIE_MAX_AGE || '86400000'), // 24h
+    redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
     // OpenID Connect Configuration
     openid: {
         issuer: process.env.OPENID_ISSUER || 'http://localhost:8080/realms/master',

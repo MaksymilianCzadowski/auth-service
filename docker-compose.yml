@@ -21,9 +21,20 @@ services:
       - OPENID_CLIENT_SECRET=${OPENID_CLIENT_SECRET}
       - OPENID_CALLBACK_URL=http://localhost:3000/auth/openid/callback
       - FRONTEND_URL=http://localhost:3001
+      - REDIS_URL=redis://redis:6379
     depends_on:
       - mongodb
       - keycloak
+      - redis
+    networks:
+      - auth-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
     networks:
       - auth-network
 
@@ -67,4 +78,5 @@ networks:
     driver: bridge
 
 volumes:
-  mongodb_data: 
+  mongodb_data:
+  redis_data: 

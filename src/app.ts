@@ -3,7 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import passport from './config/passport';
+import { sessionConfig } from './config/session';
+import { sessionLogger } from './middlewares/sessionLogger';
 import authRoutes from './routes/authRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import swaggerUi from 'swagger-ui-express';
@@ -24,6 +27,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Configuration des sessions
+app.use(session(sessionConfig));
+app.use(sessionLogger);
+
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -36,6 +43,7 @@ app.use(limiter);
 
 // Passport
 app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 app.use('/auth', authRoutes);
