@@ -11,7 +11,7 @@ export const config = {
     googleClientId: process.env.GOOGLE_CLIENT_ID,
     googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/auth/google/callback',
-    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3001',
+    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
     cookieSecret: process.env.COOKIE_SECRET || 'cookie-secret',
     cookieMaxAge: parseInt(process.env.COOKIE_MAX_AGE || '86400000'), // 24h
     redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
