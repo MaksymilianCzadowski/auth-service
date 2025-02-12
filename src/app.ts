@@ -18,7 +18,7 @@ const app = express();
 // Load Swagger document
 const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
 
-// Middleware de sécurité
+// Security middlewares
 app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL,
@@ -27,13 +27,6 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-// Configuration des sessions
-app.use(session(sessionConfig));
-app.use(sessionLogger);
-
-// Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -41,14 +34,21 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Passport
+// Session handling - MUST be before Passport
+app.use(session(sessionConfig));
+app.use(sessionLogger);
+
+// Passport initialization - AFTER session middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use('/auth', authRoutes);
 
-// Gestion des erreurs
+// Error handling
 app.use(errorHandler);
 
 export default app;

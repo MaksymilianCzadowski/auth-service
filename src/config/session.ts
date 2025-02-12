@@ -34,5 +34,6 @@ export const sessionConfig: session.SessionOptions = {
         secure: config.nodeEnv === 'production',
         httpOnly: true,
         maxAge: config.cookieMaxAge,
+        sameSite: 'lax'
     }
 }; 

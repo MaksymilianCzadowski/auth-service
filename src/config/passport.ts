@@ -4,6 +4,16 @@ import { Strategy as OpenIDStrategy, VerifyCallback, Profile as OpenIDProfile } 
 import { config } from './environment';
 import { AuthService } from '../services/authService';
 
+// Serialization pour stocker l'utilisateur dans la session
+passport.serializeUser((user: any, done) => {
+  done(null, user);
+});
+
+// Deserialization pour récupérer l'utilisateur depuis la session
+passport.deserializeUser((user: any, done) => {
+  done(null, user);
+});
+
 // Configuration de la stratégie Google OAuth2.0
 passport.use(
   'google',
@@ -36,7 +46,8 @@ passport.use(
       clientID: config.openid.clientID!,
       clientSecret: config.openid.clientSecret!,
       callbackURL: config.openid.callbackURL,
-      scope: config.openid.scope
+      scope: config.openid.scope,
+      prompt: 'login'
     },
     async (issuer: string, profile: OpenIDProfile, done: VerifyCallback) => {
       try {

@@ -7,7 +7,10 @@ const router = Router();
 // Routes Google OAuth2.0
 router.get(
   '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    prompt: 'select_account'
+  })
 );
 
 router.get(
@@ -19,7 +22,9 @@ router.get(
 // Routes OpenID Connect
 router.get(
   '/openid',
-  passport.authenticate('openid')
+  passport.authenticate('openid', {
+    prompt: 'login'
+  })
 );
 
 router.get(

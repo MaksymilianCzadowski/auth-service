@@ -27,11 +27,16 @@ const itemVariants = {
 
 export const Login = () => {
   const googleLogo = "https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg";
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<string | null>(null);
 
   const handleGoogleLogin = () => {
-    setIsLoading(true);
-    window.location.href = 'http://localhost:3000/auth/google';
+    setIsLoading('google');
+    window.location.href = 'http://localhost:3000/auth/google?prompt=select_account';
+  };
+
+  const handleOpenIDLogin = () => {
+    setIsLoading('openid');
+    window.location.href = 'http://localhost:3000/auth/openid?prompt=login';
   };
 
   return (
@@ -55,21 +60,42 @@ export const Login = () => {
           <p className="mt-2 text-gray-600">Sign in to continue to your account</p>
         </motion.div>
 
-        {/* Bouton de connexion */}
-        <motion.div variants={itemVariants}>
+        {/* Boutons de connexion */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          {/* Bouton Google */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleGoogleLogin}
-            disabled={isLoading}
+            disabled={!!isLoading}
             className={`w-full flex items-center justify-center gap-3 bg-white rounded-xl px-6 py-4 text-gray-700 shadow-lg hover:shadow-xl transition-all duration-200 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
           >
-            {isLoading ? (
+            {isLoading === 'google' ? (
               <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
             ) : (
               <>
                 <img src={googleLogo} alt="Google" className="w-6 h-6" />
                 <span className="font-medium">Continue with Google</span>
+              </>
+            )}
+          </motion.button>
+
+          {/* Bouton OpenID */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleOpenIDLogin}
+            disabled={!!isLoading}
+            className={`w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl px-6 py-4 text-white shadow-lg hover:shadow-xl transition-all duration-200 ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+          >
+            {isLoading === 'openid' ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="font-medium">Continue with OpenID</span>
               </>
             )}
           </motion.button>

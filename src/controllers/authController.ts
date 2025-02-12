@@ -89,9 +89,50 @@ export class AuthController {
 
   static async logout(req: Request, res: Response, next: NextFunction) {
     try {
-      res.clearCookie('jwt');
-      res.json({ message: 'Logged out successfully' });
+      // Supprimer le cookie JWT
+      res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: config.nodeEnv === 'production',
+        sameSite: 'lax'
+      });
+
+      // Déconnecter Passport d'abord
+      if (req.isAuthenticated()) {
+        req.logout((err) => {
+          if (err) {
+            logger.error('Error logging out from Passport:', err);
+            return next(err);
+          }
+          
+          // Détruire la session après la déconnexion Passport
+          if (req.session) {
+            req.session.destroy((err) => {
+              if (err) {
+                logger.error('Error destroying session:', err);
+                return next(err);
+              }
+              res.json({ message: 'Logged out successfully' });
+            });
+          } else {
+            res.json({ message: 'Logged out successfully' });
+          }
+        });
+      } else {
+        // Si l'utilisateur n'est pas authentifié, nettoyer quand même la session
+        if (req.session) {
+          req.session.destroy((err) => {
+            if (err) {
+              logger.error('Error destroying session:', err);
+              return next(err);
+            }
+            res.json({ message: 'Logged out successfully' });
+          });
+        } else {
+          res.json({ message: 'Logged out successfully' });
+        }
+      }
     } catch (error) {
+      logger.error('Logout error:', error);
       next(error);
     }
   }
