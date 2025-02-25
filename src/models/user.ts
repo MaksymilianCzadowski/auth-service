@@ -4,6 +4,7 @@ export interface IUser extends Document {
   email: string;
   googleId?: string;
   openIdSub?: string;
+  githubId?: string;
   firstName?: string;
   lastName?: string;
   picture?: string;
@@ -30,6 +31,11 @@ const userSchema = new Schema<IUser>(
       sparse: true,
       unique: true,
     },
+    githubId: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
     firstName: String,
     lastName: String,
     picture: String,
@@ -43,5 +49,6 @@ const userSchema = new Schema<IUser>(
 userSchema.index({ email: 1 });
 userSchema.index({ googleId: 1 });
 userSchema.index({ openIdSub: 1 });
+userSchema.index({ githubId: 1 });
 
 export const User = mongoose.model<IUser>('User', userSchema);

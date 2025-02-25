@@ -1,10 +1,11 @@
 # Authentication Microservice
 
-A robust authentication microservice built with Express.js and TypeScript, featuring Google OAuth2.0 and OpenID Connect (Keycloak) integration.
+A robust authentication microservice built with Express.js and TypeScript, featuring Google OAuth2.0, GitHub OAuth, and OpenID Connect (Keycloak) integration.
 
 ## Features
 
 - Google OAuth2.0 Authentication
+- GitHub OAuth Authentication
 - OpenID Connect Authentication with Keycloak
 - JWT Token Management
 - Rate Limiting
@@ -18,6 +19,7 @@ A robust authentication microservice built with Express.js and TypeScript, featu
 - Node.js >= 14
 - MongoDB
 - Google OAuth2.0 Credentials
+- GitHub OAuth Credentials
 - Keycloak Server (for OpenID Connect)
 
 ## Authentication Setup
@@ -47,6 +49,18 @@ A robust authentication microservice built with Express.js and TypeScript, featu
      http://localhost:3000/auth/google/callback
      ```
 6. Copy your Client ID and Client Secret
+
+### GitHub OAuth Setup
+
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+2. Click on "New OAuth App"
+3. Fill in the application details:
+   - Application name: Your app name
+   - Homepage URL: `http://localhost:3000`
+   - Authorization callback URL: `http://localhost:3000/auth/github/callback`
+4. Click "Register application"
+5. Copy your Client ID
+6. Generate a new Client Secret and copy it
 
 ### Keycloak Setup (OpenID Connect)
 
@@ -105,6 +119,11 @@ GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
 
+# GitHub OAuth Configuration
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+GITHUB_CALLBACK_URL=http://localhost:3000/auth/github/callback
+
 # OpenID Connect Configuration
 OPENID_ISSUER=http://localhost:8080/realms/auth-service
 OPENID_CLIENT_ID=auth-service-client
@@ -141,6 +160,8 @@ npm start
 
 - `GET /auth/google`: Initiate Google OAuth2.0 authentication
 - `GET /auth/google/callback`: Google OAuth2.0 callback URL
+- `GET /auth/github`: Initiate GitHub OAuth authentication
+- `GET /auth/github/callback`: GitHub OAuth callback URL
 - `GET /auth/openid`: Initiate OpenID Connect authentication
 - `GET /auth/openid/callback`: OpenID Connect callback URL
 - `GET /auth/verify`: Verifies JWT token
@@ -148,7 +169,7 @@ npm start
 
 ### Authentication Flow
 
-1. User initiates authentication via `/auth/google` or `/auth/openid`
+1. User initiates authentication via `/auth/google`, `/auth/github`, or `/auth/openid`
 2. After successful authentication, receives JWT token
 3. Use JWT token in Authorization header for protected routes
 

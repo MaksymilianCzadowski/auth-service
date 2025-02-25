@@ -22,5 +22,12 @@ export const config = {
         clientSecret: process.env.OPENID_CLIENT_SECRET,
         callbackURL: process.env.OPENID_CALLBACK_URL || 'http://localhost:3000/auth/openid/callback',
         scope: ['openid', 'profile', 'email']
+    },
+    // GitHub OAuth Configuration
+    github: {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:3000/auth/github/callback',
+        scope: ['user:email']
     }
 };

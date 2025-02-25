@@ -33,6 +33,20 @@ router.get(
   AuthController.openidCallback
 );
 
+// Routes GitHub OAuth
+router.get(
+  '/github',
+  passport.authenticate('github', { 
+    scope: ['user:email'] 
+  })
+);
+
+router.get(
+  '/github/callback',
+  passport.authenticate('github', { session: false }),
+  AuthController.githubCallback
+);
+
 // Routes communes
 router.get('/verify', AuthController.verifyToken);
 router.post('/logout', AuthController.logout);

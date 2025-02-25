@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as OpenIDStrategy, VerifyCallback, Profile as OpenIDProfile } from 'passport-openidconnect';
+import { Strategy as GitHubStrategy, Profile as GitHubProfile } from 'passport-github2';
 import { config } from './environment';
 import { AuthService } from '../services/authService';
 
@@ -55,6 +56,27 @@ passport.use(
         return done(null, authResponse);
       } catch (error) {
         return done(error as Error);
+      }
+    }
+  )
+);
+
+// Configuration de la stratégie GitHub OAuth
+passport.use(
+  'github',
+  new GitHubStrategy(
+    {
+      clientID: config.github.clientID!,
+      clientSecret: config.github.clientSecret!,
+      callbackURL: config.github.callbackURL,
+      scope: config.github.scope
+    },
+    async (accessToken: string, refreshToken: string, profile: GitHubProfile, done: (error: any, user?: any) => void) => {
+      try {
+        const authResponse = await AuthService.validateGithubUser(profile);
+        return done(null, authResponse);
+      } catch (error) {
+        return done(error, false);
       }
     }
   )

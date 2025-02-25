@@ -1,50 +1,79 @@
-# React + TypeScript + Vite
+# Authentication Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Un client React moderne pour le service d'authentification, construit avec React, TypeScript, Vite, et Tailwind CSS.
 
-Currently, two official plugins are available:
+## Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Interface utilisateur moderne et réactive
+- Animations fluides avec Framer Motion
+- Authentification via:
+  - Google OAuth2.0
+  - GitHub OAuth
+  - OpenID Connect (Keycloak)
+- Gestion des sessions utilisateur
+- Déconnexion sécurisée
+- Design responsive
 
-## Expanding the ESLint configuration
+## Prérequis
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Node.js >= 14
+- Service d'authentification backend en cours d'exécution
 
-- Configure the top-level `parserOptions` property like this:
+## Installation
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+# Installer les dépendances
+npm install
+
+# Démarrer le serveur de développement
+npm run dev
+
+# Construire pour la production
+npm run build
+
+# Prévisualiser la version de production
+npm run preview
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Configuration
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Le client est configuré pour se connecter au service d'authentification sur `http://localhost:3000`. Si votre service d'authentification s'exécute sur un port ou une URL différente, vous devrez mettre à jour les URL dans le fichier `src/pages/Login.tsx`.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+## Flux d'authentification
+
+1. L'utilisateur accède à la page de connexion
+2. L'utilisateur choisit une méthode d'authentification (Google, GitHub ou OpenID)
+3. L'utilisateur est redirigé vers le fournisseur d'authentification
+4. Après une authentification réussie, l'utilisateur est redirigé vers la page de succès
+5. Les informations de l'utilisateur sont affichées et un cookie JWT est stocké pour les futures requêtes
+
+## Structure du projet
+
 ```
+auth-client/
+├── public/              # Fichiers statiques
+├── src/                 # Code source
+│   ├── assets/          # Images et autres ressources
+│   ├── pages/           # Composants de page
+│   │   ├── Login.tsx    # Page de connexion
+│   │   └── Success.tsx  # Page après connexion réussie
+│   ├── App.tsx          # Composant principal et routes
+│   ├── main.tsx         # Point d'entrée
+│   └── index.css        # Styles globaux
+├── index.html           # Template HTML
+├── package.json         # Dépendances et scripts
+└── tsconfig.json        # Configuration TypeScript
+```
+
+## Personnalisation
+
+Vous pouvez personnaliser l'apparence et le comportement du client en modifiant les fichiers suivants:
+
+- `src/pages/Login.tsx` - Page de connexion
+- `src/pages/Success.tsx` - Page après connexion réussie
+- `src/App.css` - Styles CSS personnalisés
+- `tailwind.config.js` - Configuration de Tailwind CSS
+
+## Licence
+
+ISC
